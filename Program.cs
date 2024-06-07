@@ -8,22 +8,33 @@ namespace AlgoEfficiency
         {
             int[] array = GenerateRandomArr(10000); // 10mila
             int[] array2 = GenerateRandomArr(100000); // 100mila
-            int[] array3 = GenerateRandomArr(1000000); // 1milione
-            int[] array4 = GenerateRandomArr(10000000); // 10milioni
+
 
             int[] bubbleArr = (int[])array.Clone();
             int[] bubbleArr2 = (int[])array2.Clone();
-            int[] bubbleArr3 = (int[])array3.Clone();
-            int[] bubbleArr4 = (int[])array4.Clone();
 
-            int[] quickArr = (int[])array.Clone();
-            int[] quickArr2 = (int[])array2.Clone();
-            int[] quickArr3 = (int[])array3.Clone();
-            int[] quickArr4 = (int[])array4.Clone();
+            int[] mergeArr = (int[])array.Clone();
+            int[] mergeArr2 = (int[])array2.Clone();
+
+
+            // MergeSort
+            Console.WriteLine("\n\nMERGESORT ALGORITHM - Time Complexity O(n log(n))");
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            MergeSort(mergeArr, 0, mergeArr.Length - 1);
+            sw.Stop();
+            Console.WriteLine($"MergeSort 10k elements: {sw.ElapsedMilliseconds} ms");
+
+            sw = new Stopwatch();
+            sw.Start();
+            MergeSort(mergeArr2, 0, mergeArr2.Length - 1);
+            sw.Stop();
+            Console.WriteLine($"MergeSort 100k elements: {sw.ElapsedMilliseconds} ms");
+
 
             // BubbleSort 
-            Console.WriteLine("BUBBLE SORT ALGORITHM - Time Complexity O(n^2)");
-            Stopwatch sw = new Stopwatch();
+            Console.WriteLine("\n\nBUBBLESORT ALGORITHM - Time Complexity O(n^2)");
+            sw = new Stopwatch();
             sw.Start();
             BubbleSort(bubbleArr);
             sw.Stop();
@@ -35,47 +46,8 @@ namespace AlgoEfficiency
             sw.Stop();
             Console.WriteLine($"BubbleSort 100k elements: {sw.ElapsedMilliseconds} ms");
 
-            //sw = new Stopwatch();
-            //sw.Start();
-            //BubbleSort(bubbleArr3);
-            //sw.Stop();
-            //Console.WriteLine($"BubbleSort 1 million elements: {sw.ElapsedMilliseconds} ms");
-
-            //sw = new Stopwatch();
-            //sw.Start();
-            //BubbleSort(bubbleArr4);
-            //sw.Stop();
-            //Console.WriteLine($"BubbleSort 10 million elements: {sw.ElapsedMilliseconds} ms");
-
-            // QuickSort
-            Console.WriteLine("\n\nQUICKSORT ALGORITHM - Time Complexity O(n log(n))");
-            sw = new Stopwatch();
-            sw.Start();
-            QuickSort(quickArr, 0, quickArr.Length - 1);
-            sw.Stop();
-            Console.WriteLine($"QuickSort 10k elements: {sw.ElapsedMilliseconds} ms");
             Console.ReadLine();
 
-            sw = new Stopwatch();
-            sw.Start();
-            QuickSort(quickArr2, 0, quickArr2.Length - 1);
-            sw.Stop();
-            Console.WriteLine($"QuickSort 100k elements: {sw.ElapsedMilliseconds} ms");
-            Console.ReadLine();
-
-            //sw = new Stopwatch();
-            //sw.Start();
-            //QuickSort(quickArr3, 0, quickArr3.Length - 1);
-            //sw.Stop();
-            //Console.WriteLine($"QuickSort 1 million elements: {sw.ElapsedMilliseconds} ms");
-            //Console.ReadLine();
-
-            //sw = new Stopwatch();
-            //sw.Start();
-            //QuickSort(quickArr4, 0, quickArr4.Length - 1);
-            //sw.Stop();
-            //Console.WriteLine($"QuickSort 10 million elements: {sw.ElapsedMilliseconds} ms");
-            //Console.ReadLine();
         }
 
 
@@ -89,37 +61,55 @@ namespace AlgoEfficiency
                         Swap(ref bubbleArr[j], ref bubbleArr[j + 1]);
         }
 
-        static void Swap(ref int a, ref int b)
+
+
+        static void MergeSort(int[] array, int left, int right)
+        {
+            if (left < right)
+            {
+                int mid = left + (right - left) / 2;
+                MergeSort(array, left, mid);
+                MergeSort(array, mid + 1, right);
+                Merge(array, left, mid, right);
+            }
+        }
+
+        static void Merge(int[] array, int left, int mid, int right)
+        {
+            int n1 = mid - left + 1;
+            int n2 = right - mid;
+            int[] L = new int[n1];
+            int[] R = new int[n2];
+            Array.Copy(array, left, L, 0, n1);
+            Array.Copy(array, mid + 1, R, 0, n2);
+            int i = 0, j = 0, k = left;
+            while (i < n1 && j < n2)
+            {
+                if (L[i] <= R[j])
+                {
+                    array[k++] = L[i++];
+                }
+                else
+                {
+                    array[k++] = R[j++];
+                }
+            }
+            while (i < n1)
+            {
+                array[k++] = L[i++];
+            }
+            while (j < n2)
+            {
+                array[k++] = R[j++];
+            }
+        }
+
+
+        private static void Swap(ref int a, ref int b)
         {
             int temp = a;
             a = b;
             b = temp;
-        }
-
-        private static void QuickSort(int[] quickArr, int low, int high)
-        {
-            if (low < high)
-            {
-                int pivot = Partition(quickArr, low, high);
-                QuickSort(quickArr, low, pivot - 1);
-                QuickSort(quickArr, pivot + 1, high);
-            }
-        }
-
-        private static int Partition(int[] quickArr, int low, int high)
-        {
-            int pivot = quickArr[high];
-            int i = low - 1;
-            for (int j = low; j <= high - 1; j++)
-            {
-                if (quickArr[j] < pivot)
-                {
-                    i++;
-                    Swap(ref quickArr[i], ref quickArr[j]);
-                }
-            }
-            Swap(ref quickArr[i + 1], ref quickArr[high]);
-            return i + 1;
         }
 
         private static int[] GenerateRandomArr(int length)

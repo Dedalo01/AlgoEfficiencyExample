@@ -8,6 +8,7 @@ namespace AlgoEfficiency
         {
             int[] array = GenerateRandomArr(10000); // 10mila
             int[] array2 = GenerateRandomArr(100000); // 100mila
+            int[] array3 = GenerateRandomArr(1000000); // 1M
 
 
             int[] bubbleArr = (int[])array.Clone();
@@ -15,6 +16,7 @@ namespace AlgoEfficiency
 
             int[] mergeArr = (int[])array.Clone();
             int[] mergeArr2 = (int[])array2.Clone();
+            int[] mergeArr3 = (int[])array3.Clone();
 
 
             // MergeSort
@@ -30,6 +32,12 @@ namespace AlgoEfficiency
             MergeSort(mergeArr2, 0, mergeArr2.Length - 1);
             sw.Stop();
             Console.WriteLine($"MergeSort 100k elements: {sw.ElapsedMilliseconds} ms");
+
+            sw = new Stopwatch();
+            sw.Start();
+            MergeSort(mergeArr3, 0, mergeArr3.Length - 1);
+            sw.Stop();
+            Console.WriteLine($"MergeSort 1M elements: {sw.ElapsedMilliseconds} ms");
 
 
             // BubbleSort 
